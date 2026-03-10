@@ -1,5 +1,6 @@
 package atu.ie.oopsem2lab5.exception;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,5 +22,11 @@ public class GlobalExceptionHandler {
             errors.put(fieldName,errorMessage);
         }
         return ResponseEntity.badRequest().body(errors); // Returning hashmap with error field and message
+    }
+
+    @ExceptionHandler(ReservationConflictException.class)//If this exception is thrown run this code not default
+    public ResponseEntity<String> handleConflict(ReservationConflictException ex){ //grabbing info from ex
+
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST); // Returning hashmap with error field and message
     }
 }
