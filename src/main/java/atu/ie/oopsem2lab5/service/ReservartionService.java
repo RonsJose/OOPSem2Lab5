@@ -1,11 +1,14 @@
 package atu.ie.oopsem2lab5.service;
 
 import atu.ie.oopsem2lab5.exception.ReservationConflictException;
+import atu.ie.oopsem2lab5.exception.ReservationNotFoundException;
 import atu.ie.oopsem2lab5.model.Reservation;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ReservartionService {
@@ -14,16 +17,15 @@ public class ReservartionService {
 
     public Reservation addReservation(Reservation reservation) {
         reservation.setReservationID(nextId++);
-        reservations.add(reservation);
 
         for (Reservation existingReservation : reservations) {
-            if (existingReservation.getEquipmentTag() == reservation.getEquipmentTag() && existingReservation.getReservationDate() == reservation.getReservationDate()) {
+            if (Objects.equals(existingReservation.getEquipmentTag(), reservation.getEquipmentTag()) && Objects.equals(existingReservation.getReservationDate(), reservation.getReservationDate())){
 
                 int existingStart = existingReservation.getStartHour();
-                int existingEnd = existingReservation.getDurationHours();
+                int existingEnd = existingStart + existingReservation.getDurationHours();
 
                 int newStart = reservation.getStartHour();
-                int newEnd = reservation.getDurationHours();
+                int newEnd = newStart + reservation.getDurationHours();
 
                 if (existingStart < newEnd && newStart < existingEnd) {
                     reservation.setReservationID(nextId--);
@@ -42,4 +44,13 @@ public class ReservartionService {
     }
 
 
+    public Reservation getReservationsById(Long id) {
+        for (Reservation reservation : reservations) {
+            if (reservation.getReservationID() == id){
+                return reservation;
+            }
+        }
+
+        throw new ReservationNotFoundException("Reservation not found");
+    }
 }

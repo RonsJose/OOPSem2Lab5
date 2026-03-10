@@ -27,6 +27,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ReservationConflictException.class)//If this exception is thrown run this code not default
     public ResponseEntity<String> handleConflict(ReservationConflictException ex){ //grabbing info from ex
 
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST); // Returning hashmap with error field and message
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT); // Returning hashmap with error field and message
+    }
+
+    @ExceptionHandler(ReservationNotFoundException.class)//If this exception is thrown run this code not default
+    public ResponseEntity<String> handleConflict(ReservationNotFoundException ex){ //grabbing info from ex
+
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT); // Returning hashmap with error field and message
     }
 }

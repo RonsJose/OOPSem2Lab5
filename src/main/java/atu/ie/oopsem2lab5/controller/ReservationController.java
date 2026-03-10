@@ -31,4 +31,9 @@ public class ReservationController {
     public ResponseEntity<List<Reservation>> getAllReservations() {
         return ResponseEntity.ok(reservationService.getReservations());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Reservation> getReservationById(@PathVariable Long id) {
+        return ResponseEntity.ok(reservationService.getReservationsById(id));
+    }
 }
